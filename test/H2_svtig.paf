@@ -1,0 +1,5 @@
+svtig_del_small	80	5	40	+	chr1_h2	50000	2000	2035	30	35	20	tp:A:P	cg:Z:35M	NM:i:5	AS:i:60
+svtig_del_medium	350	10	200	+	chr2_h2	80000	6000	6190	170	190	15	tp:A:P	cg:Z:190M	NM:i:20	AS:i:320
+svtig_ins_large	1200	0	600	+	chr3_h2	120000	15000	15600	550	600	30	tp:A:P	cg:Z:300M200I100M	NM:i:50	AS:i:440
+svtig_mixed	600	0	300	+	chr5_h2	90000	25000	25300	260	300	25	tp:A:P	cg:Z:150M80D150M	NM:i:40	AS:i:220
+svtig_no_sv	200	0	195	+	chr7_h2	60000	4000	4195	190	195	60	tp:A:P	cg:Z:195M	NM:i:5	AS:i:385

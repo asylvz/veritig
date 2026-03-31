@@ -1,0 +1,5 @@
+build/
+test/output/
+.claude/
+.DS_Store
+*.o

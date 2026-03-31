@@ -1,0 +1,4 @@
+sv_ins_h2only	500	0	470	+	ctg_h2_002	60000	3000	3470	440	470	60	tp:A:P	cg:Z:200M100I270M	NM:i:30	AS:i:700
+sv_del_homo	600	0	560	+	ctg_h2_003	80000	6000	6560	530	560	50	tp:A:P	cg:Z:280M120D280M	NM:i:30	AS:i:790
+sv_ins_homo_h2better	800	0	760	+	ctg_h2_004	120000	15000	15760	720	760	60	tp:A:P	cg:Z:400M150I360M	NM:i:40	AS:i:900
+sv_unmapped	300	0	0	*	*	0	0	0	0	0	0	tp:A:P	cg:Z:*	NM:i:0	AS:i:0
