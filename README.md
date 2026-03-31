@@ -1,8 +1,8 @@
-# VeriTig
+# veritig
 
 A toolkit for analyzing and verifying structural variant sequences (SVtigs) using haplotype-resolved assemblies.
 
-VeriTig maps SVtig sequences to haplotype assemblies via minimap2, computes concordance metrics and VeriScore (a composite quality metric), and provides tools for quality assessment and filtering.
+veritig maps SVtig sequences to haplotype assemblies via minimap2, computes concordance metrics and VeriScore (a composite quality metric), and provides tools for quality assessment and filtering.
 
 ## Quick Start
 
@@ -19,7 +19,7 @@ make
 
 ## Modes
 
-VeriTig provides five modes for different stages of SVtig analysis:
+veritig provides five modes for different stages of SVtig analysis:
 
 ### `--stats` — SVtig Statistics
 

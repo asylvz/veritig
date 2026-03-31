@@ -12,12 +12,12 @@ void run_command(const std::string& cmd, const std::string& output_file)
 	int ret = system(cmd.c_str());
 	if (ret != 0)
 	{
-		std::cerr << "[VERITIG ERROR] Command failed (exit code " << ret << "): " << cmd << "\n";
+		std::cerr << "[veritig] Command failed (exit code " << ret << "): " << cmd << "\n";
 		exit(EXIT_FAILURE);
 	}
 	if (!output_file.empty() && (!std::filesystem::exists(output_file) || std::filesystem::file_size(output_file) == 0))
 	{
-		std::cerr << "[VERITIG ERROR] Expected output file missing or empty: " << output_file << "\n";
+		std::cerr << "[veritig] Expected output file missing or empty: " << output_file << "\n";
 		exit(EXIT_FAILURE);
 	}
 }

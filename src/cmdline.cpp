@@ -102,13 +102,13 @@ int parse_command_line(int argc, char** argv, parameters& params)
 	{
 		if((params.haplo1_assembly_path).empty())
 		{
-			std::cerr<<"[VERITIG ERROR] Please enter assembly file path for haplotype 1 using \"--h1\".\n";
+			std::cerr<<"[veritig] Please enter assembly file path for haplotype 1 using \"--h1\".\n";
 			return RETURN_ERROR;
 		}
 
 		if((params.svtig1_path).empty())
 		{
-			std::cerr<<"[VERITIG ERROR] Please enter svtig path for the first haplotype using \"--svtig1\".\n";
+			std::cerr<<"[veritig] Please enter svtig path for the first haplotype using \"--svtig1\".\n";
 			return RETURN_ERROR;
 		}
 
@@ -116,12 +116,12 @@ int parse_command_line(int argc, char** argv, parameters& params)
 		{
 			if((params.haplo2_assembly_path).empty())
 			{
-				std::cerr<<"[VERITIG ERROR] Please enter assembly file path for haplotype 2 using \"--h2\".\n";
+				std::cerr<<"[veritig] Please enter assembly file path for haplotype 2 using \"--h2\".\n";
 				return RETURN_ERROR;
 			}
 			if((params.svtig2_path).empty())
 			{
-				std::cerr<<"[VERITIG ERROR] Please enter svtig path for the second haplotype using \"--svtig2\".\n";
+				std::cerr<<"[veritig] Please enter svtig path for the second haplotype using \"--svtig2\".\n";
 				return RETURN_ERROR;
 			}
 		}
@@ -131,19 +131,19 @@ int parse_command_line(int argc, char** argv, parameters& params)
 	{
 		if((params.haplo1_assembly_path).empty())
 		{
-			std::cerr<<"[VERITIG ERROR] Please enter assembly file path for haplotype 1 using \"--h1\".\n";
+			std::cerr<<"[veritig] Please enter assembly file path for haplotype 1 using \"--h1\".\n";
 			return RETURN_ERROR;
 		}
 
 		if((params.haplo2_assembly_path).empty())
 		{
-			std::cerr<<"[VERITIG ERROR] Please enter assembly file path for haplotype 2 using \"--h2\".\n";
+			std::cerr<<"[veritig] Please enter assembly file path for haplotype 2 using \"--h2\".\n";
 			return RETURN_ERROR;
 		}
 
 		if((params.fasta).empty())
 		{
-			std::cerr<<"[VERITIG ERROR] Please enter SV sequences FASTA file using \"--fasta\".\n";
+			std::cerr<<"[veritig] Please enter SV sequences FASTA file using \"--fasta\".\n";
 			return RETURN_ERROR;
 		}
 	}
@@ -152,7 +152,7 @@ int parse_command_line(int argc, char** argv, parameters& params)
 	{
 		if ((params.svtig1_path).empty() && (params.fasta).empty())
 		{
-			std::cerr<<"[VERITIG ERROR] Please enter SVtig FASTA file using \"--svtig1\" or \"--fasta\".\n";
+			std::cerr<<"[veritig] Please enter SVtig FASTA file using \"--svtig1\" or \"--fasta\".\n";
 			return RETURN_ERROR;
 		}
 	}
@@ -161,17 +161,17 @@ int parse_command_line(int argc, char** argv, parameters& params)
 	{
 		if ((params.haplo1_assembly_path).empty())
 		{
-			std::cerr<<"[VERITIG ERROR] Please enter assembly file using \"--h1\".\n";
+			std::cerr<<"[veritig] Please enter assembly file using \"--h1\".\n";
 			return RETURN_ERROR;
 		}
 		if ((params.svtig1_path).empty())
 		{
-			std::cerr<<"[VERITIG ERROR] Please enter first SVtig FASTA file using \"--svtig1\".\n";
+			std::cerr<<"[veritig] Please enter first SVtig FASTA file using \"--svtig1\".\n";
 			return RETURN_ERROR;
 		}
 		if ((params.svtig2_path).empty())
 		{
-			std::cerr<<"[VERITIG ERROR] Please enter second SVtig FASTA file using \"--svtig2\".\n";
+			std::cerr<<"[veritig] Please enter second SVtig FASTA file using \"--svtig2\".\n";
 			return RETURN_ERROR;
 		}
 	}
@@ -180,12 +180,12 @@ int parse_command_line(int argc, char** argv, parameters& params)
 	{
 		if ((params.haplo1_assembly_path).empty())
 		{
-			std::cerr<<"[VERITIG ERROR] Please enter assembly file using \"--h1\".\n";
+			std::cerr<<"[veritig] Please enter assembly file using \"--h1\".\n";
 			return RETURN_ERROR;
 		}
 		if ((params.svtig1_path).empty() && (params.fasta).empty())
 		{
-			std::cerr<<"[VERITIG ERROR] Please enter SVtig FASTA file using \"--svtig1\" or \"--fasta\".\n";
+			std::cerr<<"[veritig] Please enter SVtig FASTA file using \"--svtig1\" or \"--fasta\".\n";
 			return RETURN_ERROR;
 		}
 	}
@@ -207,7 +207,7 @@ int parse_command_line(int argc, char** argv, parameters& params)
 
 void init_logs(parameters& params)
 {
-	std::cerr << "\n...VeriTig is running...\n";
+	std::cerr << "\n...veritig is running...\n";
 
 	std::filesystem::create_directories(params.log_path);
 
@@ -231,7 +231,7 @@ void init_logs(parameters& params)
 void print_help()
 {
 	std::cerr << std::endl;
-	std::cout << "VeriTig - SVtig Verification Tool" << std::endl;
+	std::cout << "veritig - SVtig Verification Tool" << std::endl;
 	std::cout << "\tVersion " << VERITIG_VERSION << ", Last update: " << VERITIG_UPDATE << "\n";
 	std::cerr << std::endl;
 	std::cerr << "Concordance analysis (--concordance)" << std::endl;
