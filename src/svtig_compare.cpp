@@ -186,7 +186,7 @@ void SvtigCompare::run(parameters& params)
 {
 	int count1 = count_seqs(params.svtig1_path);
 	int count2 = count_seqs(params.svtig2_path);
-	std::cerr << "  SVtig counts: svtig1=" << count1 << ", svtig2=" << count2 << "\n";
+	std::cerr << "  svtig counts: svtig1=" << count1 << ", svtig2=" << count2 << "\n";
 
 	std::string paf1, paf2;
 

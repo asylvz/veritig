@@ -1,8 +1,8 @@
 # veritig
 
-A toolkit for analyzing and verifying structural variant sequences (SVtigs) using haplotype-resolved assemblies.
+A toolkit for analyzing and verifying structural variant sequences (svtigs) using haplotype-resolved assemblies.
 
-veritig maps SVtig sequences to haplotype assemblies via minimap2, computes concordance metrics and VeriScore (a composite quality metric), and provides tools for quality assessment and filtering.
+veritig maps svtig sequences to haplotype assemblies via minimap2, computes concordance metrics and VeriScore (a composite quality metric), and provides tools for quality assessment and filtering.
 
 ## Quick Start
 
@@ -19,19 +19,19 @@ make
 
 ## Modes
 
-veritig provides five modes for different stages of SVtig analysis:
+veritig provides five modes for different stages of svtig analysis:
 
-### `--stats` — SVtig Statistics
+### `--stats` — svtig Statistics
 
-Computes basic statistics of SVtig sequences directly from FASTA files. No mapping required.
+Computes basic statistics of svtig sequences directly from FASTA files. No mapping required.
 
-**Use when:** You want a quick quality overview of your SVtig set before running any analysis.
+**Use when:** You want a quick quality overview of your svtig set before running any analysis.
 
 ```bash
 # Single set
 veritig --stats --svtig1 svtigs.fa -o output/ -s sample_name
 
-# Two sets (e.g., phased SVtigs)
+# Two sets (e.g., phased svtigs)
 veritig --stats --svtig1 svtigs_h1.fa --svtig2 svtigs_h2.fa -o output/ -s sample_name
 ```
 
@@ -39,9 +39,9 @@ veritig --stats --svtig1 svtigs_h1.fa --svtig2 svtigs_h2.fa -o output/ -s sample
 
 ### `--concordance` — Concordance Analysis
 
-Measures how well SVtig sequences map to each haplotype assembly. All mappings for each SVtig are **accumulated**: mapping metrics are averaged across multiple alignments, and supplementary alignments contribute to a combined mapping ratio. The result is a concordance score and VeriScore per SVtig.
+Measures how well svtig sequences map to each haplotype assembly. All mappings for each svtig are **accumulated**: mapping metrics are averaged across multiple alignments, and supplementary alignments contribute to a combined mapping ratio. The result is a concordance score and VeriScore per svtig.
 
-**Use when:** You want to measure overall mapping quality of SVtigs against assemblies.
+**Use when:** You want to measure overall mapping quality of svtigs against assemblies.
 
 ```bash
 # Single haplotype
@@ -53,7 +53,7 @@ veritig --concordance --h1 hap1.fa --svtig1 svtigs_h1.fa \
                       --phase -o output/ -s sample_name
 ```
 
-**Output:** `{sample}.svtig.report.tsv` (per-SVtig metrics including VeriScore) and `{sample}.svtig.concordance.tsv` (summary with mean/median VeriScore). Unmapped SVtigs are included in the report with `haplotype=unmapped` and `veriscore=0`.
+**Output:** `{sample}.svtig.report.tsv` (per-svtig metrics including VeriScore) and `{sample}.svtig.concordance.tsv` (summary with mean/median VeriScore). Unmapped svtigs are included in the report with `haplotype=unmapped` and `veriscore=0`.
 
 ### `--validate` — SV Validation
 
@@ -67,11 +67,11 @@ veritig --validate --h1 hap1.fa --h2 hap2.fa --fasta svs.fa -o output/ -s sample
 
 **Output:** `{sample}.sv.report.tsv` (per-SV metrics with haplotype and VeriScore) and `{sample}.sv.concordance.tsv` (summary with mean/median VeriScore). Unmapped SVs are included with `haplotype=unmapped` and `veriscore=0`.
 
-### `--compare` — SVtig Set Comparison
+### `--compare` — svtig Set Comparison
 
-Compares two SVtig sets by mapping both to the same assembly and reporting side-by-side concordance metrics. Useful for comparing SVtigs from different callers, parameters, or samples.
+Compares two svtig sets by mapping both to the same assembly and reporting side-by-side concordance metrics. Useful for comparing svtigs from different callers, parameters, or samples.
 
-**Use when:** You want to evaluate which SVtig set has better mapping quality, or how two sets differ across size ranges.
+**Use when:** You want to evaluate which svtig set has better mapping quality, or how two sets differ across size ranges.
 
 ```bash
 veritig --compare --h1 hap1.fa --svtig1 setA.fa --svtig2 setB.fa -o output/ -s sample_name
@@ -79,11 +79,11 @@ veritig --compare --h1 hap1.fa --svtig1 setA.fa --svtig2 setB.fa -o output/ -s s
 
 **Output:** `{sample}.compare.tsv` with per-set metrics including concordance rate, average mapping ratio, average identity, and size-binned concordance percentages.
 
-### `--filter` — SVtig Filtering
+### `--filter` — svtig Filtering
 
-Maps SVtig sequences to a single haplotype assembly and outputs only those that pass concordance thresholds as a new FASTA file.
+Maps svtig sequences to a single haplotype assembly and outputs only those that pass concordance thresholds as a new FASTA file.
 
-**Use when:** You want to produce a cleaned SVtig set for downstream analysis.
+**Use when:** You want to produce a cleaned svtig set for downstream analysis.
 
 ```bash
 # Default thresholds (0.85/0.85)
@@ -93,7 +93,7 @@ veritig --filter --h1 hap1.fa --svtig1 svtigs.fa -o output/ -s sample_name
 veritig --filter --h1 hap1.fa --svtig1 svtigs.fa -M 0.95 -I 0.95 -o output/ -s sample_name
 ```
 
-**Output:** `{sample}.filtered.fa` containing only concordant SVtigs.
+**Output:** `{sample}.filtered.fa` containing only concordant svtigs.
 
 ### Key differences between `--concordance` and `--validate`
 
@@ -124,13 +124,13 @@ Results are written to `veritig_results/` under the output directory.
 
 ```
 veritig_results/
-├── {sample}.stats.tsv                 # SVtig statistics (--stats)
-├── {sample}.svtig.report.tsv          # Per-SVtig concordance report (--concordance)
-├── {sample}.svtig.concordance.tsv     # SVtig concordance summary (--concordance)
+├── {sample}.stats.tsv                 # svtig statistics (--stats)
+├── {sample}.svtig.report.tsv          # Per-svtig concordance report (--concordance)
+├── {sample}.svtig.concordance.tsv     # svtig concordance summary (--concordance)
 ├── {sample}.sv.report.tsv             # Per-SV report with haplotype (--validate)
 ├── {sample}.sv.concordance.tsv        # SV concordance summary (--validate)
 ├── {sample}.compare.tsv               # Side-by-side comparison (--compare)
-├── {sample}.filtered.fa               # Filtered SVtigs (--filter)
+├── {sample}.filtered.fa               # Filtered svtigs (--filter)
 ├── paf/                               # Minimap2 alignment files
 │   ├── {sample}.svtig.H1.paf
 │   ├── {sample}.svtig.H2.paf
@@ -149,15 +149,15 @@ veritig_results/
 
 ### Report columns
 
-**SVtig report** (`--concordance`):
+**svtig report** (`--concordance`):
 `svtig_name`, `svtig_size`, `haplotype`, `combined_map_ratio`, `aln_identity`, `mapq`, `edit_dist`, `aln_score`, `ins_count`, `del_count`, `sv_count`, `sv_type`, `concordant`, `veriscore`
 
 **SV report** (`--validate`):
 `sv_name`, `sv_size`, `contig`, `haplotype`, `map_ratio`, `aln_identity`, `mapq`, `edit_dist`, `aln_score`, `ins_count`, `del_count`, `sv_count`, `sv_type`, `concordant`, `veriscore`
 
-An SVtig/SV is **concordant** if `map_ratio >= min_map_ratio` AND `aln_identity >= min_identity`.
+An svtig/SV is **concordant** if `map_ratio >= min_map_ratio` AND `aln_identity >= min_identity`.
 
-Unmapped SVtigs/SVs are listed with `haplotype=unmapped`, `sv_type=NA`, all metrics at zero, and `veriscore=0`.
+Unmapped svtigs/SVs are listed with `haplotype=unmapped`, `sv_type=NA`, all metrics at zero, and `veriscore=0`.
 
 ## VeriScore
 
@@ -187,7 +187,7 @@ Key properties:
 - **Balanced**: no implicit weighting; a 10% drop in any metric reduces the score by ~3.4%
 - **Complementary to concordance**: concordance is binary (pass/fail); VeriScore provides continuous ranking within both concordant and discordant groups
 
-**Aggregate VeriScore** (mean and median) is reported in the concordance summary and terminal output as a single-number quality indicator for the entire SVtig/SV set.
+**Aggregate VeriScore** (mean and median) is reported in the concordance summary and terminal output as a single-number quality indicator for the entire svtig/SV set.
 
 ### With `--detailed`
 
@@ -195,18 +195,18 @@ Per-haplotype analysis files in the `detailed/` subdirectory:
 
 | File | Description |
 |------|-------------|
-| `*.details.tsv` | Per-SVtig/SV metrics for each haplotype mapping |
+| `*.details.tsv` | Per-svtig/SV metrics for each haplotype mapping |
 | `*.summary.tsv` | Aggregate statistics (counts, averages, mean/median VeriScore) |
 | `*.size_bins.tsv` | Concordance by SV size range (50-100, 100-500, 500-1k, 1k-10k, 10k+) |
 | `*.svtype.tsv` | Concordance by SV type (INS, DEL, MIXED, NONE) |
 
 ## How It Works
 
-1. SVtig/SV sequences are aligned to haplotype assemblies using minimap2 (`-cx asm10`)
+1. svtig/SV sequences are aligned to haplotype assemblies using minimap2 (`-cx asm10`)
 2. PAF alignments are parsed to extract mapping ratio, alignment identity, MAPQ, edit distance, alignment score, and SV counts from CIGAR strings
 3. Supplementary alignments are accumulated into a combined mapping ratio (`--concordance`) or ignored (`--validate`)
 4. Structural variants (>50bp insertions/deletions) are detected from CIGAR and classified by type (INS, DEL, MIXED)
-5. Each SVtig/SV is marked concordant or discordant based on configurable thresholds
+5. Each svtig/SV is marked concordant or discordant based on configurable thresholds
 6. VeriScore is computed as the geometric mean of mapping ratio, alignment identity, and Phred-transformed MAPQ
 7. Unmapped sequences are included in the report with VeriScore = 0
 

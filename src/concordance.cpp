@@ -429,7 +429,7 @@ void Concordance::run(parameters& params)
 	double conc_H1_svtig1 = 0, conc_H1_svtig2 = 0, conc_H2_svtig1 = 0, conc_H2_svtig2 = 0;
 
 	count_svtigs(params);
-	std::cerr << "  SVtig count: " << this->h1_count << " (H1)";
+	std::cerr << "  svtig count: " << this->h1_count << " (H1)";
 	if (params.phase)
 		std::cerr << ", " << this->h2_count << " (H2)";
 	std::cerr << "\n";
@@ -456,7 +456,7 @@ void Concordance::run(parameters& params)
 		conc_H2_svtig2 = mapping_stats(this->paf_H2_svtig2_path, h2_count, "svtig2_H2", params);
 	}
 
-	// Add unmapped SVtigs to results
+	// Add unmapped svtigs to results
 	{
 		std::set<std::string> mapped_names;
 		for (auto& r : results)

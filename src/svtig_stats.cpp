@@ -155,16 +155,16 @@ void SvtigStats::write_report(SeqStats& s1, SeqStats& s2, SeqStats& combined, bo
 	}
 
 	// Terminal summary
-	std::cerr << "  SVtig statistics:\n";
+	std::cerr << "  svtig statistics:\n";
 	if (has_svtig2)
 	{
-		std::cerr << "    svtig1: " << s1.count << " SVtigs, " << s1.total_bases << " bases, N50=" << s1.n50 << "\n";
-		std::cerr << "    svtig2: " << s2.count << " SVtigs, " << s2.total_bases << " bases, N50=" << s2.n50 << "\n";
-		std::cerr << "    combined: " << combined.count << " SVtigs, " << combined.total_bases << " bases, N50=" << combined.n50 << "\n";
+		std::cerr << "    svtig1: " << s1.count << " svtigs, " << s1.total_bases << " bases, N50=" << s1.n50 << "\n";
+		std::cerr << "    svtig2: " << s2.count << " svtigs, " << s2.total_bases << " bases, N50=" << s2.n50 << "\n";
+		std::cerr << "    combined: " << combined.count << " svtigs, " << combined.total_bases << " bases, N50=" << combined.n50 << "\n";
 	}
 	else
 	{
-		std::cerr << "    " << s1.count << " SVtigs, " << s1.total_bases << " bases, N50=" << s1.n50 << "\n";
+		std::cerr << "    " << s1.count << " svtigs, " << s1.total_bases << " bases, N50=" << s1.n50 << "\n";
 	}
 	std::cerr << "  Results written to " << params.log_path << "\n";
 }
@@ -172,7 +172,7 @@ void SvtigStats::write_report(SeqStats& s1, SeqStats& s2, SeqStats& combined, bo
 
 void SvtigStats::run(parameters& params)
 {
-	std::cerr << "  Computing SVtig statistics...\n";
+	std::cerr << "  Computing svtig statistics...\n";
 
 	bool has_svtig2 = !params.svtig2_path.empty();
 	std::string fasta = params.svtig1_path.empty() ? params.fasta : params.svtig1_path;

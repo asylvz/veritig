@@ -13,7 +13,7 @@ void SvtigFilter::run_mapping(parameters& params)
 
 	std::string fasta = params.svtig1_path.empty() ? params.fasta : params.svtig1_path;
 
-	std::cerr << "  Mapping SVtigs to assembly...";
+	std::cerr << "  Mapping svtigs to assembly...";
 	std::string minimap_cmd = "minimap2 -cx asm10 -t " + threads_str + " "
 		+ params.haplo1_assembly_path + " " + fasta
 		+ " --secondary=no > " + this->paf_path + " 2>/dev/null";
@@ -130,7 +130,7 @@ void SvtigFilter::write_filtered_fasta(std::set<std::string>& passing, parameter
 		}
 	}
 
-	std::cerr << "  " << passed << "/" << total << " SVtigs passed ("
+	std::cerr << "  " << passed << "/" << total << " svtigs passed ("
 		<< ((total > 0) ? (double)passed / total * 100 : 0) << "%)\n";
 	std::cerr << "  Filtered FASTA written to " << output_path << "\n";
 }
@@ -138,7 +138,7 @@ void SvtigFilter::write_filtered_fasta(std::set<std::string>& passing, parameter
 
 void SvtigFilter::run(parameters& params)
 {
-	std::cerr << "  Filtering SVtigs (map_ratio >= " << params.min_map_ratio
+	std::cerr << "  Filtering svtigs (map_ratio >= " << params.min_map_ratio
 		<< ", identity >= " << params.min_aln_identity << ")...\n";
 
 	if (!params.skip_mapping)

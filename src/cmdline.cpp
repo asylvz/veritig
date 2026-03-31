@@ -152,7 +152,7 @@ int parse_command_line(int argc, char** argv, parameters& params)
 	{
 		if ((params.svtig1_path).empty() && (params.fasta).empty())
 		{
-			std::cerr<<"[veritig] Please enter SVtig FASTA file using \"--svtig1\" or \"--fasta\".\n";
+			std::cerr<<"[veritig] Please enter svtig FASTA file using \"--svtig1\" or \"--fasta\".\n";
 			return RETURN_ERROR;
 		}
 	}
@@ -166,12 +166,12 @@ int parse_command_line(int argc, char** argv, parameters& params)
 		}
 		if ((params.svtig1_path).empty())
 		{
-			std::cerr<<"[veritig] Please enter first SVtig FASTA file using \"--svtig1\".\n";
+			std::cerr<<"[veritig] Please enter first svtig FASTA file using \"--svtig1\".\n";
 			return RETURN_ERROR;
 		}
 		if ((params.svtig2_path).empty())
 		{
-			std::cerr<<"[veritig] Please enter second SVtig FASTA file using \"--svtig2\".\n";
+			std::cerr<<"[veritig] Please enter second svtig FASTA file using \"--svtig2\".\n";
 			return RETURN_ERROR;
 		}
 	}
@@ -185,7 +185,7 @@ int parse_command_line(int argc, char** argv, parameters& params)
 		}
 		if ((params.svtig1_path).empty() && (params.fasta).empty())
 		{
-			std::cerr<<"[veritig] Please enter SVtig FASTA file using \"--svtig1\" or \"--fasta\".\n";
+			std::cerr<<"[veritig] Please enter svtig FASTA file using \"--svtig1\" or \"--fasta\".\n";
 			return RETURN_ERROR;
 		}
 	}
@@ -231,33 +231,33 @@ void init_logs(parameters& params)
 void print_help()
 {
 	std::cerr << std::endl;
-	std::cout << "veritig - SVtig Verification Tool" << std::endl;
+	std::cout << "veritig - svtig Verification Tool" << std::endl;
 	std::cout << "\tVersion " << VERITIG_VERSION << ", Last update: " << VERITIG_UPDATE << "\n";
 	std::cerr << std::endl;
 	std::cerr << "Concordance analysis (--concordance)" << std::endl;
 	std::cerr << "\t--h1                : Haplotype 1 assembly file" << std::endl;
-	std::cerr << "\t--svtig1            : SVtig FASTA file for haplotype 1" << std::endl;
+	std::cerr << "\t--svtig1            : svtig FASTA file for haplotype 1" << std::endl;
 	std::cerr << "\t--phase             : Enable phased mode (requires --h2, --svtig2)" << std::endl;
 	std::cerr << "\t--h2                : Haplotype 2 assembly file" << std::endl;
-	std::cerr << "\t--svtig2            : SVtig FASTA file for haplotype 2" << std::endl;
+	std::cerr << "\t--svtig2            : svtig FASTA file for haplotype 2" << std::endl;
 	std::cerr << std::endl;
 	std::cerr << "SV validation (--validate)" << std::endl;
 	std::cerr << "\t--h1                : Haplotype 1 assembly file" << std::endl;
 	std::cerr << "\t--h2                : Haplotype 2 assembly file" << std::endl;
 	std::cerr << "\t--fasta             : SV sequences FASTA file" << std::endl;
 	std::cerr << std::endl;
-	std::cerr << "SVtig statistics (--stats)" << std::endl;
-	std::cerr << "\t--svtig1            : SVtig FASTA file (or --fasta)" << std::endl;
-	std::cerr << "\t--svtig2            : Second SVtig FASTA file (optional)" << std::endl;
+	std::cerr << "svtig statistics (--stats)" << std::endl;
+	std::cerr << "\t--svtig1            : svtig FASTA file (or --fasta)" << std::endl;
+	std::cerr << "\t--svtig2            : Second svtig FASTA file (optional)" << std::endl;
 	std::cerr << std::endl;
-	std::cerr << "SVtig comparison (--compare)" << std::endl;
+	std::cerr << "svtig comparison (--compare)" << std::endl;
 	std::cerr << "\t--h1                : Haplotype assembly file" << std::endl;
-	std::cerr << "\t--svtig1            : First SVtig FASTA file" << std::endl;
-	std::cerr << "\t--svtig2            : Second SVtig FASTA file" << std::endl;
+	std::cerr << "\t--svtig1            : First svtig FASTA file" << std::endl;
+	std::cerr << "\t--svtig2            : Second svtig FASTA file" << std::endl;
 	std::cerr << std::endl;
-	std::cerr << "SVtig filtering (--filter)" << std::endl;
+	std::cerr << "svtig filtering (--filter)" << std::endl;
 	std::cerr << "\t--h1                : Haplotype assembly file" << std::endl;
-	std::cerr << "\t--svtig1            : SVtig FASTA file (or --fasta)" << std::endl;
+	std::cerr << "\t--svtig1            : svtig FASTA file (or --fasta)" << std::endl;
 	std::cerr << std::endl;
 	std::cerr << "General options" << std::endl;
 	std::cerr << "\t--threads (-T)      : Number of threads for minimap2 [16]" << std::endl;

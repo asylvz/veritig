@@ -30,7 +30,7 @@ echo "=== Output files (default) ==="
 find "$OUT_DIR/veritig_results" -type f | sort
 
 echo ""
-echo "=== SVtig Report ==="
+echo "=== svtig Report ==="
 cat "$OUT_DIR/veritig_results/test.svtig.report.tsv"
 
 echo ""

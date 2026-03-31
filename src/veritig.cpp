@@ -17,21 +17,21 @@ int main(int argc, char** argv)
 
 	if (params.stats)
 	{
-		std::cerr<<"\nRunning SVtig statistics...\n";
+		std::cerr<<"\nRunning svtig statistics...\n";
 		SvtigStats s;
 		s.run(params);
 	}
 
 	if (params.compare)
 	{
-		std::cerr<<"\nComparing SVtig sets...\n";
+		std::cerr<<"\nComparing svtig sets...\n";
 		SvtigCompare c;
 		c.run(params);
 	}
 
 	if (params.filter)
 	{
-		std::cerr<<"\nFiltering SVtigs...\n";
+		std::cerr<<"\nFiltering svtigs...\n";
 		SvtigFilter f;
 		f.run(params);
 	}
