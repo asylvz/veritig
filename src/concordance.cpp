@@ -74,12 +74,12 @@ void Concordance::run_mapping(parameters& params)
 	this->paf_H2_svtig1_path = paf_dir + params.sample_name + ".svtig.H2.paf";
 
 	std::cerr << "  Mapping svtig1 to H1...";
-	minimap_cmd = "minimap2 -cx asm10 -t " + threads_str + " " + params.haplo1_assembly_path + " " + params.svtig1_path + " --secondary=no > " + this->paf_H1_svtig1_path + " 2>/dev/null";
+	minimap_cmd = "minimap2 -cx " + params.minimap_preset + " -t " + threads_str + " " + params.haplo1_assembly_path + " " + params.svtig1_path + " --secondary=no > " + this->paf_H1_svtig1_path + " 2>/dev/null";
 	run_command(minimap_cmd, this->paf_H1_svtig1_path);
 	std::cerr << " done\n";
 
 	std::cerr << "  Mapping svtig1 to H2...";
-	minimap_cmd = "minimap2 -cx asm10 -t " + threads_str + " " + params.haplo2_assembly_path + " " + params.svtig1_path + " --secondary=no > " + this->paf_H2_svtig1_path + " 2>/dev/null";
+	minimap_cmd = "minimap2 -cx " + params.minimap_preset + " -t " + threads_str + " " + params.haplo2_assembly_path + " " + params.svtig1_path + " --secondary=no > " + this->paf_H2_svtig1_path + " 2>/dev/null";
 	run_command(minimap_cmd, this->paf_H2_svtig1_path);
 	std::cerr << " done\n";
 
@@ -89,12 +89,12 @@ void Concordance::run_mapping(parameters& params)
 		this->paf_H2_svtig2_path = paf_dir + params.sample_name + ".svtig2.H2.paf";
 
 		std::cerr << "  Mapping svtig2 to H1...";
-		minimap_cmd = "minimap2 -cx asm10 -t " + threads_str + " " + params.haplo1_assembly_path + " " + params.svtig2_path + " --secondary=no > " + this->paf_H1_svtig2_path + " 2>/dev/null";
+		minimap_cmd = "minimap2 -cx " + params.minimap_preset + " -t " + threads_str + " " + params.haplo1_assembly_path + " " + params.svtig2_path + " --secondary=no > " + this->paf_H1_svtig2_path + " 2>/dev/null";
 		run_command(minimap_cmd, this->paf_H1_svtig2_path);
 		std::cerr << " done\n";
 
 		std::cerr << "  Mapping svtig2 to H2...";
-		minimap_cmd = "minimap2 -cx asm10 -t " + threads_str + " " + params.haplo2_assembly_path + " " + params.svtig2_path + " --secondary=no > " + this->paf_H2_svtig2_path + " 2>/dev/null";
+		minimap_cmd = "minimap2 -cx " + params.minimap_preset + " -t " + threads_str + " " + params.haplo2_assembly_path + " " + params.svtig2_path + " --secondary=no > " + this->paf_H2_svtig2_path + " 2>/dev/null";
 		run_command(minimap_cmd, this->paf_H2_svtig2_path);
 		std::cerr << " done\n";
 	}

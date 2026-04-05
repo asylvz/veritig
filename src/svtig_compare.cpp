@@ -27,7 +27,7 @@ std::string SvtigCompare::run_mapping(std::string fasta, std::string label, para
 	std::string threads_str = std::to_string(params.threads);
 
 	std::cerr << "  Mapping " << label << " to assembly...";
-	std::string cmd = "minimap2 -cx asm10 -t " + threads_str + " "
+	std::string cmd = "minimap2 -cx " + params.minimap_preset + " -t " + threads_str + " "
 		+ params.haplo1_assembly_path + " " + fasta
 		+ " --secondary=no > " + paf_path + " 2>/dev/null";
 	run_command(cmd, paf_path);

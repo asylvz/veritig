@@ -45,12 +45,12 @@ void Validate::run_mapping(parameters& params)
 	this->paf_H2_sv_path = paf_dir + params.sample_name + ".sv.H2.paf";
 
 	std::cerr << "  Mapping SVs to H1...";
-	minimap_cmd = "minimap2 -cx asm10 -t " + threads_str + " --paf-no-hit " + params.haplo1_assembly_path + " " + params.fasta + " --secondary=no > " + this->paf_H1_sv_path + " 2>/dev/null";
+	minimap_cmd = "minimap2 -cx " + params.minimap_preset + " -t " + threads_str + " --paf-no-hit " + params.haplo1_assembly_path + " " + params.fasta + " --secondary=no > " + this->paf_H1_sv_path + " 2>/dev/null";
 	run_command(minimap_cmd, this->paf_H1_sv_path);
 	std::cerr << " done\n";
 
 	std::cerr << "  Mapping SVs to H2...";
-	minimap_cmd = "minimap2 -cx asm10 -t " + threads_str + " --paf-no-hit " + params.haplo2_assembly_path + " " + params.fasta + " --secondary=no > " + this->paf_H2_sv_path + " 2>/dev/null";
+	minimap_cmd = "minimap2 -cx " + params.minimap_preset + " -t " + threads_str + " --paf-no-hit " + params.haplo2_assembly_path + " " + params.fasta + " --secondary=no > " + this->paf_H2_sv_path + " 2>/dev/null";
 	run_command(minimap_cmd, this->paf_H2_sv_path);
 	std::cerr << " done\n";
 }

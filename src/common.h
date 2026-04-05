@@ -35,6 +35,7 @@ typedef struct _parameters
 	int threads = 16;
 	double min_map_ratio = 0.85;
 	double min_aln_identity = 0.85;
+	std::string minimap_preset = "asm10";
 } parameters;
 
 typedef struct _read

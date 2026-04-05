@@ -31,11 +31,12 @@ int parse_command_line(int argc, char** argv, parameters& params)
 		{"min-map-ratio" , required_argument, NULL, 'M'},
 		{"min-identity" , required_argument, NULL, 'I'},
 		{"detailed" , no_argument, NULL, 'D'},
+		{"preset" , required_argument, NULL, 'P'},
 
 		{NULL, 0, NULL, 0}
 	};
 
-	while((o = getopt_long( argc, argv, "cf:hi:j:mo:pqrs:t:u:vyT:M:I:D", long_options, &index)) != -1)
+	while((o = getopt_long( argc, argv, "cf:hi:j:mo:pqrs:t:u:vyT:M:I:DP:", long_options, &index)) != -1)
 	{
 		switch(o)
 		{
@@ -92,6 +93,9 @@ int parse_command_line(int argc, char** argv, parameters& params)
 				break;
 			case 'D':
 				params.detailed = true;
+				break;
+			case 'P':
+				params.minimap_preset = optarg;
 				break;
 			case 'h':
 				print_help();
@@ -223,6 +227,7 @@ void init_logs(parameters& params)
 	{
 		std::cerr << "Concordance thresholds: map_ratio >= " << params.min_map_ratio
 			<< ", identity >= " << params.min_aln_identity << "\n";
+		std::cerr << "minimap2 preset: " << params.minimap_preset << "\n";
 		std::cerr << "Threads: " << params.threads << "\n";
 	}
 }
@@ -260,6 +265,7 @@ void print_help()
 	std::cerr << "\t--svtig1            : svtig FASTA file (or --fasta)" << std::endl;
 	std::cerr << std::endl;
 	std::cerr << "General options" << std::endl;
+	std::cerr << "\t--preset (-P)       : minimap2 preset [asm10] (e.g., asm5, asm10, asm20)" << std::endl;
 	std::cerr << "\t--threads (-T)      : Number of threads for minimap2 [16]" << std::endl;
 	std::cerr << "\t--min-map-ratio (-M): Min mapping ratio for concordance [0.85]" << std::endl;
 	std::cerr << "\t--min-identity (-I) : Min alignment identity for concordance [0.85]" << std::endl;

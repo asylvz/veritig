@@ -95,21 +95,11 @@ veritig --filter --h1 hap1.fa --svtig1 svtigs.fa -M 0.95 -I 0.95 -o output/ -s s
 
 **Output:** `{sample}.filtered.fa` containing only concordant svtigs.
 
-### Key differences between `--concordance` and `--validate`
-
-| | `--concordance` | `--validate` |
-|---|---|---|
-| Purpose | Measure concordance | Per-SV metrics and haplotype assignment |
-| Multiple mappings | Accumulate and average | Keep only the best |
-| Supplementary alignments | Included in combined mapping ratio | Not accumulated |
-| Haplotype assignment | No | Yes (H1 / H2 / Homo) |
-| Contig info | Not reported | Reported per SV |
-| Phased mode | Yes (`--phase`) | No |
-
 ### Options
 
 | Option | Description | Default |
 |--------|-------------|---------|
+| `--preset (-P)` | minimap2 preset (e.g., asm5, asm10, asm20) | asm10 |
 | `--threads (-T)` | Number of threads for minimap2 | 16 |
 | `--min-map-ratio (-M)` | Minimum mapping ratio for concordance | 0.85 |
 | `--min-identity (-I)` | Minimum alignment identity for concordance | 0.85 |
@@ -202,7 +192,7 @@ Per-haplotype analysis files in the `detailed/` subdirectory:
 
 ## How It Works
 
-1. svtig/SV sequences are aligned to haplotype assemblies using minimap2 (`-cx asm10`)
+1. svtig/SV sequences are aligned to haplotype assemblies using minimap2 (`-cx asm10` by default, configurable with `--preset`)
 2. PAF alignments are parsed to extract mapping ratio, alignment identity, MAPQ, edit distance, alignment score, and SV counts from CIGAR strings
 3. Supplementary alignments are accumulated into a combined mapping ratio (`--concordance`) or ignored (`--validate`)
 4. Structural variants (>50bp insertions/deletions) are detected from CIGAR and classified by type (INS, DEL, MIXED)
