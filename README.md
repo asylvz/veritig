@@ -57,9 +57,9 @@ veritig --concordance --h1 hap1.fa --svtig1 svtigs_h1.fa \
 
 ### `--validate` — SV Validation
 
-Evaluates each SV sequence individually by mapping it to both haplotype assemblies. Only the **best mapping** (highest mapping ratio) is kept per SV. Each SV is assigned a haplotype (H1, H2, or Homo) based on which assemblies it maps to.
+Takes a single unphased FASTA and determines the haplotype of origin for each sequence. Each sequence is aligned to both assemblies; only the best primary alignment (by mapping ratio) is kept, and the sequence is assigned to H1, H2, or Homo. Unlike `--concordance --phase` which verifies pre-existing phasing from separate H1/H2 input files, validate infers phasing de novo from a single input. Supplementary alignments are not accumulated. The output also reports the target assembly contig name.
 
-**Use when:** You want per-SV mapping metrics (sequence identity, mapping ratio) and haplotype assignment.
+**Use when:** Your input is a single unphased FASTA and you want to know which haplotype each sequence belongs to and how good its best alignment is.
 
 ```bash
 veritig --validate --h1 hap1.fa --h2 hap2.fa --fasta svs.fa -o output/ -s sample_name
