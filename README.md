@@ -44,20 +44,6 @@ veritig --filter --h1 hap1.fa --svtig1 svtigs.fa -M 0.95 -I 0.95 -o output/ -s s
 veritig --compare --h1 hap1.fa --svtig1 setA.fa --svtig2 setB.fa -o output/ -s sample
 ```
 
-## VeriScore
-
-A continuous quality metric in [0, 1]:
-
-```
-VeriScore = (R × I × C)^(1/3)
-```
-
-- **R** — mapping ratio (completeness)
-- **I** — alignment identity (accuracy)
-- **C** — Phred-transformed MAPQ (confidence), with floor at Q=3
-
-The geometric mean ensures that a weakness in any single component is reflected in the overall score.
-
 ## Documentation
 
 See the [Wiki](https://github.com/asylvz/veritig/wiki) for detailed documentation:
