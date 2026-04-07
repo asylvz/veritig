@@ -60,12 +60,6 @@ See the [Wiki](https://github.com/asylvz/veritig/wiki) for detailed documentatio
 - [VeriScore](https://github.com/asylvz/veritig/wiki/VeriScore) — formulation, properties, and interpretation
 - [Output Format](https://github.com/asylvz/veritig/wiki/Output-Format) — file structure, report columns, detailed output
 
-## Citation
-
-If you use veritig in your research, please cite:
-
-> Söylev A. Sequence-level verification of structural variant assemblies with veritig. *BMC Bioinformatics* (2026).
-
 ## License
 
 MIT
