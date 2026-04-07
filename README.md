@@ -27,15 +27,21 @@ make
 ## Quick Examples
 
 ```bash
+# Statistics (no assembly needed)
+veritig --stats --svtig1 svtigs_h1.fa --svtig2 svtigs_h2.fa -o output/ -s sample
+
 # Concordance with phasing
 veritig --concordance --h1 hap1.fa --svtig1 svtigs_h1.fa \
         --h2 hap2.fa --svtig2 svtigs_h2.fa --phase -o output/ -s sample
 
+# Validate (single unphased FASTA)
+veritig --validate --h1 hap1.fa --h2 hap2.fa --fasta svs.fa -o output/ -s sample
+
 # Filter low-quality svtigs
 veritig --filter --h1 hap1.fa --svtig1 svtigs.fa -M 0.95 -I 0.95 -o output/ -s sample
 
-# Basic statistics
-veritig --stats --svtig1 svtigs.fa -o output/ -s sample
+# Compare two svtig sets
+veritig --compare --h1 hap1.fa --svtig1 setA.fa --svtig2 setB.fa -o output/ -s sample
 ```
 
 ## VeriScore
