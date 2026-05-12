@@ -5,6 +5,8 @@
 #include "svtig_stats.h"
 #include "svtig_filter.h"
 #include "svtig_compare.h"
+#include "project.h"
+#include "verify.h"
 
 
 int main(int argc, char** argv)
@@ -47,6 +49,20 @@ int main(int argc, char** argv)
 	{
 		std::cerr<<"\nRunning SV validation...\n";
 		Validate v;
+		v.run(params);
+	}
+
+	if (params.project)
+	{
+		std::cerr<<"\nProjecting svtigs to linear reference...\n";
+		Project p;
+		p.run(params);
+	}
+
+	if (params.verify)
+	{
+		std::cerr<<"\nRunning sequence-level verification...\n";
+		Verify v;
 		v.run(params);
 	}
 
