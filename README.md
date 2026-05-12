@@ -23,6 +23,8 @@ make
 | `--validate` | De novo haplotype assignment from a single unphased FASTA |
 | `--filter` | Quality-based filtering, outputs concordant svtigs as FASTA |
 | `--compare` | Side-by-side comparison of two svtig sets |
+| `--project` | Linear projection of svtigs to a single-sample VCF |
+| `--verify` | Gap-aware sequence-level verification of VCF SV calls |
 
 ## Quick Examples
 
@@ -42,6 +44,12 @@ veritig --filter --h1 hap1.fa --svtig1 svtigs.fa -M 0.95 -I 0.95 -o output/ -s s
 
 # Compare two svtig sets
 veritig --compare --h1 hap1.fa --svtig1 setA.fa --svtig2 setB.fa -o output/ -s sample
+
+# Project svtigs to a single-sample VCF on a linear reference
+veritig --project --ref ref.fa --svtig1 svtigs_h1.fa --svtig2 svtigs_h2.fa -o output/ -s sample
+
+# Verify VCF SV calls against haplotype assemblies (gap-aware sequence-level check)
+veritig --verify --vcf calls.vcf --ref ref.fa --h1 hap1.fa --h2 hap2.fa -o output/ -s sample
 ```
 
 ## Documentation
