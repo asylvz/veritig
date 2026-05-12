@@ -1,8 +1,0 @@
-build/
-test/output/
-test_project/
-.DS_Store
-*.o
-.claude/
-PROJECT_MODE_TODO.md
-wiki/
