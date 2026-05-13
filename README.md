@@ -46,6 +46,7 @@ veritig --filter --h1 hap1.fa --svtig1 svtigs.fa -M 0.95 -I 0.95 -o output/ -s s
 veritig --compare --h1 hap1.fa --svtig1 setA.fa --svtig2 setB.fa -o output/ -s sample
 
 # Project svtigs to a single-sample VCF on a linear reference
+# (accepts 1, 2, or 3 svtig FASTAs; phased GT when --svtig1 + --svtig2 are given)
 veritig --project --ref ref.fa --svtig1 svtigs_h1.fa --svtig2 svtigs_h2.fa -o output/ -s sample
 
 # Verify VCF SV calls against haplotype assemblies (gap-aware sequence-level check)
