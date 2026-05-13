@@ -23,7 +23,7 @@ make
 | `--validate` | De novo haplotype assignment from a single unphased FASTA |
 | `--filter` | Quality-based filtering, outputs concordant svtigs as FASTA |
 | `--compare` | Side-by-side comparison of two svtig sets |
-| `--project` | Linear projection of svtigs to a single-sample VCF |
+| `--project` | Assembly-based SV caller (svtigs or FASTA → single-sample VCF) |
 | `--verify` | Gap-aware sequence-level verification of VCF SV calls |
 
 ## Quick Examples
