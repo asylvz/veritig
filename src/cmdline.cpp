@@ -194,6 +194,16 @@ int parse_command_line(int argc, char** argv, parameters& params)
 				exit(0);
 		}
 	}
+
+	if (!params.concordance && !params.validate && !params.stats
+		&& !params.filter && !params.compare && !params.project && !params.verify)
+	{
+		std::cerr << "[veritig] No mode specified. Use one of:\n"
+			<< "    --stats, --concordance, --validate, --filter, --compare, --project, --verify\n"
+			<< "Run 'veritig --help' for full usage.\n";
+		return RETURN_ERROR;
+	}
+
 	if (params.concordance)
 	{
 		if((params.haplo1_assembly_path).empty())
