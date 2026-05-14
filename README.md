@@ -4,7 +4,11 @@
 
 Sequence-level verification of structural variant assemblies against haplotype-resolved references.
 
-veritig aligns svtig sequences to haplotype assemblies via minimap2, computes concordance metrics and VeriScore, and provides tools for quality assessment and filtering.
+veritig aligns assembled SV sequences to haplotype-resolved references and computes concordance metrics and VeriScore, complementing VCF-based benchmarking with sequence-level evaluation. Companion modes provide filtering and comparison, assembly-based SV calling against a linear reference (`--project`), and gap-aware verification of VCF SV calls (`--verify`).
+
+An svtig (structural variant contig) is a sequence-resolved local assembly of an SV-bearing region together with flanking context, typically a few kb to tens of kb of contiguous sequence that captures the full variant allele. Unlike a VCF record, which only encodes coordinates and length, an svtig carries the actual variant sequence.
+
+svtigs are currently produced by [SVarp](https://github.com/asylvz/svarp), a pangenome-based SV caller that clusters reads at candidate SV loci on a pangenome graph and locally assembles them. veritig accepts FASTA input: one file for unphased data, or two files (`--svtig1` for H1, `--svtig2` for H2) for haplotype-phased data. Although designed for svtigs, any FASTA of SV-bearing or local-assembly sequences is accepted, and the same alignment-based metrics apply.
 
 ## Installation
 
@@ -20,13 +24,13 @@ make
 
 | Mode | Description |
 |------|-------------|
-| `--stats` | Descriptive statistics of svtig sets (no assembly needed) |
 | `--concordance` | Concordance analysis against haplotype assemblies |
 | `--validate` | De novo haplotype assignment from a single unphased FASTA |
 | `--filter` | Quality-based filtering, outputs concordant svtigs as FASTA |
 | `--compare` | Side-by-side comparison of two svtig sets |
 | `--project` | Assembly-based SV caller (svtigs or FASTA → single-sample VCF) |
 | `--verify` | Gap-aware sequence-level verification of VCF SV calls |
+| `--stats` | Descriptive statistics of svtig sets (no assembly needed) |
 
 ## Quick Examples
 
