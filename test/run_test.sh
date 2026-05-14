@@ -6,6 +6,20 @@ VERITIG="$SCRIPT_DIR/../build/veritig"
 TEST_DIR="$SCRIPT_DIR"
 OUT_DIR="$TEST_DIR/output"
 
+# Fail the test if grep doesn't find $3 lines matching $1 in $2.
+assert_count() {
+    local pattern="$1"
+    local file="$2"
+    local expected="$3"
+    local actual
+    actual=$(grep -c -E "$pattern" "$file" || true)
+    if [ "$actual" -ne "$expected" ]; then
+        echo "  FAIL: expected $expected lines matching /$pattern/ in $file, got $actual"
+        exit 1
+    fi
+    echo "  pass: $actual x /$pattern/ in $(basename "$file")"
+}
+
 rm -rf "$OUT_DIR"
 mkdir -p "$OUT_DIR/veritig_results/paf"
 
@@ -182,7 +196,7 @@ if ! command -v minimap2 >/dev/null 2>&1; then
     exit 0
 fi
 
-echo "=== Test 8: project mode ==="
+echo "=== Test 8: project mode (INS + DEL + INV + DUP) ==="
 rm -rf "$OUT_DIR"
 
 $VERITIG --project \
@@ -192,14 +206,23 @@ $VERITIG --project \
     --sample test \
     --threads 2
 
+PROJ_VCF="$OUT_DIR/veritig_results/test.projected.vcf"
 echo ""
-echo "=== Project VCF (non-header lines) ==="
-grep -v "^##" "$OUT_DIR/veritig_results/test.projected.vcf"
+echo "--- assertions on $PROJ_VCF ---"
+# Expect exactly one record per SV type.
+assert_count "SVTYPE=INS" "$PROJ_VCF" 1
+assert_count "SVTYPE=DEL" "$PROJ_VCF" 1
+assert_count "SVTYPE=INV" "$PROJ_VCF" 1
+assert_count "SVTYPE=DUP" "$PROJ_VCF" 1
+# Records carry their svtig source name.
+assert_count "SVTIG=svtig_ins" "$PROJ_VCF" 1
+assert_count "SVTIG=svtig_del" "$PROJ_VCF" 1
+assert_count "SVTIG=svtig_inv" "$PROJ_VCF" 1
+assert_count "SVTIG=svtig_dup" "$PROJ_VCF" 1
 
 echo ""
-echo "=== Test 9: verify mode ==="
-# Use the VCF just produced by --project as input
-PROJ_VCF="$OUT_DIR/veritig_results/test.projected.vcf"
+echo "=== Test 9: verify mode (haplotype assignment) ==="
+# h1 carries INS + INV, h2 carries DEL + DUP. Verify should label each accordingly.
 rm -rf "$OUT_DIR/verify"
 
 $VERITIG --verify \
@@ -211,9 +234,17 @@ $VERITIG --verify \
     --sample test \
     --threads 2
 
+VER_VCF="$OUT_DIR/verify/veritig_results/test.verified.vcf"
 echo ""
-echo "=== Verified VCF (non-header lines) ==="
-grep -v "^##" "$OUT_DIR/verify/veritig_results/test.verified.vcf"
+echo "--- assertions on $VER_VCF ---"
+# All 4 records should pass verification.
+assert_count "VERIFIED=yes" "$VER_VCF" 4
+assert_count "VERIFIED=no" "$VER_VCF" 0
+# Haplotype labels match the carrier-haplotype layout.
+assert_count "SVTYPE=INS.*VAL_HAP=H1" "$VER_VCF" 1
+assert_count "SVTYPE=INV.*VAL_HAP=H1" "$VER_VCF" 1
+assert_count "SVTYPE=DEL.*VAL_HAP=H2" "$VER_VCF" 1
+assert_count "SVTYPE=DUP.*VAL_HAP=H2" "$VER_VCF" 1
 
 echo ""
 echo "=== DONE ==="
