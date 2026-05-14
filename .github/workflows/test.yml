@@ -1,0 +1,24 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install minimap2
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y minimap2
+
+      - name: Build veritig
+        run: make
+
+      - name: Run test suite
+        run: bash test/run_test.sh
