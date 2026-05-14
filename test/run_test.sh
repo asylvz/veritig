@@ -175,4 +175,45 @@ echo "=== Compare output ==="
 cat "$OUT_DIR/veritig_results/test.compare.tsv"
 
 echo ""
+if ! command -v minimap2 >/dev/null 2>&1; then
+    echo "=== Tests 8-9 skipped: minimap2 not in PATH ==="
+    echo ""
+    echo "=== DONE ==="
+    exit 0
+fi
+
+echo "=== Test 8: project mode ==="
+rm -rf "$OUT_DIR"
+
+$VERITIG --project \
+    --ref "$TEST_DIR/ref_test.fa" \
+    --svtig1 "$TEST_DIR/svtigs_test.fa" \
+    --out "$OUT_DIR/" \
+    --sample test \
+    --threads 2
+
+echo ""
+echo "=== Project VCF (non-header lines) ==="
+grep -v "^##" "$OUT_DIR/veritig_results/test.projected.vcf"
+
+echo ""
+echo "=== Test 9: verify mode ==="
+# Use the VCF just produced by --project as input
+PROJ_VCF="$OUT_DIR/veritig_results/test.projected.vcf"
+rm -rf "$OUT_DIR/verify"
+
+$VERITIG --verify \
+    --vcf "$PROJ_VCF" \
+    --ref "$TEST_DIR/ref_test.fa" \
+    --h1 "$TEST_DIR/h1_test.fa" \
+    --h2 "$TEST_DIR/h2_test.fa" \
+    --out "$OUT_DIR/verify/" \
+    --sample test \
+    --threads 2
+
+echo ""
+echo "=== Verified VCF (non-header lines) ==="
+grep -v "^##" "$OUT_DIR/verify/veritig_results/test.verified.vcf"
+
+echo ""
 echo "=== DONE ==="
