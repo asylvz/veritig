@@ -1,5 +1,7 @@
 # veritig
 
+[![tests](https://github.com/asylvz/veritig/actions/workflows/test.yml/badge.svg)](https://github.com/asylvz/veritig/actions/workflows/test.yml)
+
 Sequence-level verification of structural variant assemblies against haplotype-resolved references.
 
 veritig aligns svtig sequences to haplotype assemblies via minimap2, computes concordance metrics and VeriScore, and provides tools for quality assessment and filtering.
