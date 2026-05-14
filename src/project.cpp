@@ -5,6 +5,7 @@
 #include <map>
 #include <set>
 #include <cctype>
+#include <cstdint>
 #include "project.h"
 #include "edlib.h"
 
