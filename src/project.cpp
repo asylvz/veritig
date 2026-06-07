@@ -488,7 +488,6 @@ std::vector<ProjectedSV> Project::cluster_within_svtig(std::vector<ProjectedSV>&
 
 		ProjectedSV current = group[0];
 		bool in_cluster = false;
-		int cluster_count = 1;
 
 		for (size_t i = 1; i < group.size(); i++)
 		{
@@ -523,7 +522,6 @@ std::vector<ProjectedSV> Project::cluster_within_svtig(std::vector<ProjectedSV>&
 						current.alt_seq += nxt.alt_seq.substr(1);
 				}
 				current.mapq = std::max(current.mapq, nxt.mapq);
-				cluster_count++;
 				in_cluster = true;
 				merge_events++;
 			}
@@ -532,7 +530,6 @@ std::vector<ProjectedSV> Project::cluster_within_svtig(std::vector<ProjectedSV>&
 				if (in_cluster) merge_clusters++;
 				result.push_back(current);
 				current = nxt;
-				cluster_count = 1;
 				in_cluster = false;
 			}
 		}
