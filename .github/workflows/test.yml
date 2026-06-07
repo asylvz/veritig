@@ -8,14 +8,23 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install minimap2
+      - name: Install minimap2 (Linux)
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y minimap2
+
+      - name: Install minimap2 (macOS)
+        if: runner.os == 'macOS'
+        run: brew install minimap2
 
       - name: Build veritig
         run: make
