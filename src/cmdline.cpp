@@ -317,7 +317,11 @@ int parse_command_line(int argc, char** argv, parameters& params)
 		params.log_path = cwd + "/veritig_results/";
 	}
 	else
+	{
+		if (params.output_path.back() != '/')
+			params.output_path += '/';
 		params.log_path = params.output_path + "veritig_results/";
+	}
 
 	if((params.sample_name).empty())
 		params.sample_name = "sample";

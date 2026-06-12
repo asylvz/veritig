@@ -100,6 +100,7 @@ struct PafRecord
 };
 
 int parse_paf_line(std::string& line, PafRecord& rec);
+std::string shell_quote(const std::string& s);
 double compute_veriscore(double map_ratio, double aln_identity, int mapq);
 int decompose_cigar(std::string cigar, std::vector<int>& cigarLen, std::vector<char>& cigarOp);
 void run_command(const std::string& cmd, const std::string& output_file);

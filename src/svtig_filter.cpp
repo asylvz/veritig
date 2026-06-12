@@ -14,9 +14,9 @@ void SvtigFilter::run_mapping(parameters& params)
 	std::string fasta = params.svtig1_path.empty() ? params.fasta : params.svtig1_path;
 
 	std::cerr << "  Mapping svtigs to assembly...";
-	std::string minimap_cmd = "minimap2 -cx " + params.minimap_preset + " -t " + threads_str + " "
-		+ params.haplo1_assembly_path + " " + fasta
-		+ " --secondary=no > " + this->paf_path + " 2>/dev/null";
+	std::string minimap_cmd = "minimap2 -cx " + shell_quote(params.minimap_preset) + " -t " + threads_str + " "
+		+ shell_quote(params.haplo1_assembly_path) + " " + shell_quote(fasta)
+		+ " --secondary=no > " + shell_quote(this->paf_path) + " 2>/dev/null";
 	run_command(minimap_cmd, this->paf_path);
 	std::cerr << " done\n";
 }

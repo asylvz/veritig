@@ -152,6 +152,7 @@ std::string Verify::build_expected_seq(const VerifySV& sv,
 	int ctg_len = (int)chrom_seq.size();
 	int start = sv.pos - 1;  // 0-based
 	if (sv.svlen <= 0) { reason = "svlen_zero"; return ""; }
+	if (start >= ctg_len) { reason = "pos_past_contig"; return ""; }
 
 	int up_start = std::max(0, start - flank);
 	int up_end = start;
@@ -254,8 +255,8 @@ void Verify::run_minimap(parameters& params, const std::string& query_fa,
 	std::string threads_str = std::to_string(params.threads);
 	std::cerr << "  Mapping expected_seq to " << target_fa << "...";
 	std::string cmd = "minimap2 -cx asm5 -t " + threads_str + " "
-		+ "--secondary=no " + target_fa + " " + query_fa
-		+ " > " + paf_out + " 2>/dev/null";
+		+ "--secondary=no " + shell_quote(target_fa) + " " + shell_quote(query_fa)
+		+ " > " + shell_quote(paf_out) + " 2>/dev/null";
 	run_command(cmd, paf_out);
 	std::cerr << " done\n";
 }

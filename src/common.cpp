@@ -23,6 +23,33 @@ void run_command(const std::string& cmd, const std::string& output_file)
 }
 
 
+// No-throw integer parse for machine-generated PAF fields: returns 0 on a
+// non-numeric token instead of throwing, so one malformed line cannot abort
+// the whole run. Identical to stoi for valid numeric tokens.
+static int to_int(const std::string& s)
+{
+	return (int)std::strtol(s.c_str(), nullptr, 10);
+}
+
+
+// POSIX single-quote a string for safe interpolation into a shell command
+// (handles paths with spaces or metacharacters). For ordinary paths the shell
+// strips the quotes, so the argv passed to minimap2 is byte-identical.
+std::string shell_quote(const std::string& s)
+{
+	std::string out = "'";
+	for (char c : s)
+	{
+		if (c == '\'')
+			out += "'\\''";
+		else
+			out += c;
+	}
+	out += "'";
+	return out;
+}
+
+
 int decompose_cigar(std::string cigar, std::vector<int>& cigarLen, std::vector<char>& cigarOp)
 {
 	int count = 0;
@@ -76,19 +103,19 @@ int parse_paf_line(std::string& line, PafRecord& rec)
 		return RETURN_ERROR;
 
 	rec.read_name = tokens[0];
-	rec.svtig_size = stoi(tokens[1]);
+	rec.svtig_size = to_int(tokens[1]);
 	rec.contig = tokens[5];
-	rec.mapq = stoi(tokens[11]);
+	rec.mapq = to_int(tokens[11]);
 
-	int query_start = stoi(tokens[2]);
-	int query_end = stoi(tokens[3]);
+	int query_start = to_int(tokens[2]);
+	int query_end = to_int(tokens[3]);
 
 	if (query_start == 0 && query_end == 0)
 		return RETURN_ERROR;
 
 	rec.aligned_bases = query_end - query_start;
 	rec.map_ratio = (double)rec.aligned_bases / rec.svtig_size;
-	rec.aln_identity = (double)stoi(tokens[9]) / stoi(tokens[10]);
+	rec.aln_identity = (double)to_int(tokens[9]) / to_int(tokens[10]);
 
 	rec.sv_count = 0;
 	rec.ins_count = 0;
@@ -125,9 +152,9 @@ int parse_paf_line(std::string& line, PafRecord& rec)
 			}
 		}
 		else if (tok.substr(0, 5) == "NM:i:")
-			rec.edit_dist = stoi(tok.substr(5));
+			rec.edit_dist = to_int(tok.substr(5));
 		else if (tok.substr(0, 5) == "AS:i:")
-			rec.aln_score = stoi(tok.substr(5));
+			rec.aln_score = to_int(tok.substr(5));
 	}
 
 	return rec.sv_count;
