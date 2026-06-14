@@ -1,5 +1,7 @@
 #include <iostream>
 #include <algorithm>
+#include <sstream>
+#include <iomanip>
 #include "svtig_stats.h"
 
 
@@ -154,19 +156,39 @@ void SvtigStats::write_report(SeqStats& s1, SeqStats& s2, SeqStats& combined, bo
 		fp << "size_10000_plus\t" << s1.size_10000_plus << "\n";
 	}
 
-	// Terminal summary
-	std::cerr << "  svtig statistics:\n";
+	// Terminal summary: full table (the .tsv above is the machine-readable copy)
+	auto dbl = [](double v, int p) { std::ostringstream o; o << std::fixed << std::setprecision(p) << v; return o.str(); };
+	auto vals = [&](const SeqStats& s) {
+		return std::vector<std::string>{
+			std::to_string(s.count), std::to_string(s.total_bases), std::to_string(s.min_size),
+			std::to_string(s.max_size), dbl(s.mean_size, 1), std::to_string(s.median_size),
+			std::to_string(s.n50), dbl(s.gc_content, 3), dbl(s.n_content, 3),
+			std::to_string(s.size_50_100), std::to_string(s.size_100_500), std::to_string(s.size_500_1000),
+			std::to_string(s.size_1000_10000), std::to_string(s.size_10000_plus)};
+	};
+	const char* names[] = {
+		"total_svtigs", "total_bases", "min_size", "max_size", "mean_size", "median_size", "N50",
+		"GC_content", "N_content", "size_50_100", "size_100_500", "size_500_1000",
+		"size_1000_10000", "size_10000_plus"};
+
+	std::cerr << "\n  svtig statistics (" << params.sample_name << "):\n";
+	std::cerr << "    " << std::left << std::setw(16) << "metric" << std::right;
 	if (has_svtig2)
-	{
-		std::cerr << "    svtig1: " << s1.count << " svtigs, " << s1.total_bases << " bases, N50=" << s1.n50 << "\n";
-		std::cerr << "    svtig2: " << s2.count << " svtigs, " << s2.total_bases << " bases, N50=" << s2.n50 << "\n";
-		std::cerr << "    combined: " << combined.count << " svtigs, " << combined.total_bases << " bases, N50=" << combined.n50 << "\n";
-	}
+		std::cerr << std::setw(12) << "svtig1" << std::setw(12) << "svtig2" << std::setw(12) << "combined" << "\n";
 	else
+		std::cerr << std::setw(12) << "value" << "\n";
+
+	std::vector<std::string> v1 = vals(s1);
+	std::vector<std::string> v2 = has_svtig2 ? vals(s2) : std::vector<std::string>();
+	std::vector<std::string> vc = has_svtig2 ? vals(combined) : std::vector<std::string>();
+	for (size_t i = 0; i < 14; i++)
 	{
-		std::cerr << "    " << s1.count << " svtigs, " << s1.total_bases << " bases, N50=" << s1.n50 << "\n";
+		std::cerr << "    " << std::left << std::setw(16) << names[i] << std::right << std::setw(12) << v1[i];
+		if (has_svtig2)
+			std::cerr << std::setw(12) << v2[i] << std::setw(12) << vc[i];
+		std::cerr << "\n";
 	}
-	std::cerr << "  Results written to " << params.log_path << "\n";
+	std::cerr << "  Results written to " << report_path << "\n";
 }
 
 
