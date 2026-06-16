@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <sstream>
 #include <algorithm>
@@ -634,7 +635,19 @@ void Verify::run(parameters& params)
 
 	std::cerr << "  Final: " << n_verified << "/" << n_total
 	          << " verified (" << (n_total ? (100.0 * n_verified / n_total) : 0.0) << "%)\n";
-	std::cerr << "  Summary: " << summary_path << "\n";
+	std::cerr << "\n  verify summary (" << params.sample_name << "):\n";
+	auto vrow = [](const std::string& t, int tot, int ver) {
+		std::ostringstream pct; pct << std::fixed << std::setprecision(2) << (tot ? 100.0 * ver / tot : 0.0) << "%";
+		std::cerr << "    " << std::left << std::setw(8) << t
+			<< std::right << std::setw(8) << tot << std::setw(10) << ver << std::setw(14) << pct.str() << "\n";
+	};
+	std::cerr << "    " << std::left << std::setw(8) << "svtype"
+		<< std::right << std::setw(8) << "total" << std::setw(10) << "verified" << std::setw(14) << "verified_pct" << "\n";
+	for (const auto& kv : by_type)
+		vrow(kv.first, kv.second.count("total") ? kv.second.at("total") : 0,
+			kv.second.count("verified") ? kv.second.at("verified") : 0);
+	vrow("TOTAL", n_total, n_verified);
+	std::cerr << "  Summary written to " << summary_path << "\n";
 }
 
 

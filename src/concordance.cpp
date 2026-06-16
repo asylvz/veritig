@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <sstream>
 #include <algorithm>
@@ -481,6 +482,15 @@ void Concordance::run(parameters& params)
 	std::ofstream fp_conc(concordance_path);
 	fp_conc << "svtig_set\thaplotype\tconcordant\ttotal\tconcordance_pct\n";
 
+	auto crow = [](const std::string& set, const std::string& hap, int conc, int tot) {
+		std::ostringstream pct; pct << std::fixed << std::setprecision(2) << (tot ? 100.0 * conc / tot : 0.0) << "%";
+		std::cerr << "    " << std::left << std::setw(10) << set << std::setw(10) << hap
+			<< std::right << std::setw(11) << conc << std::setw(8) << tot << std::setw(13) << pct.str() << "\n";
+	};
+	std::cerr << "\n  concordance (" << params.sample_name << "):\n";
+	std::cerr << "    " << std::left << std::setw(10) << "svtig_set" << std::setw(10) << "haplotype"
+		<< std::right << std::setw(11) << "concordant" << std::setw(8) << "total" << std::setw(13) << "conc_pct" << "\n";
+
 	if (params.phase)
 	{
 		fp_conc << "svtig1\tH1\t" << conc_H1_svtig1 << "\t" << h1_count << "\t" << (conc_H1_svtig1 / (double)h1_count) * 100 << "\n";
@@ -488,29 +498,18 @@ void Concordance::run(parameters& params)
 		fp_conc << "svtig2\tH1\t" << conc_H1_svtig2 << "\t" << h2_count << "\t" << (conc_H1_svtig2 / (double)h2_count) * 100 << "\n";
 		fp_conc << "svtig2\tH2\t" << conc_H2_svtig2 << "\t" << h2_count << "\t" << (conc_H2_svtig2 / (double)h2_count) * 100 << "\n";
 
-		double conc_H1, conc_H2;
-		if (conc_H1_svtig1 > conc_H2_svtig1)
-		{
-			conc_H1 = (conc_H1_svtig1 / (double)h1_count) * 100;
-			conc_H2 = (conc_H2_svtig2 / (double)h2_count) * 100;
-		}
-		else
-		{
-			conc_H1 = (conc_H1_svtig2 / (double)h2_count) * 100;
-			conc_H2 = (conc_H2_svtig1 / (double)h1_count) * 100;
-		}
-
-		std::cerr << "  Concordance: H1=" << conc_H1 << "%, H2=" << conc_H2
-			<< "%, Average=" << (conc_H1 + conc_H2) / 2.0 << "%\n";
+		crow("svtig1", "H1", conc_H1_svtig1, h1_count);
+		crow("svtig1", "H2", conc_H2_svtig1, h1_count);
+		crow("svtig2", "H1", conc_H1_svtig2, h2_count);
+		crow("svtig2", "H2", conc_H2_svtig2, h2_count);
 	}
 	else
 	{
 		fp_conc << "svtig1\tH1\t" << conc_H1_svtig1 << "\t" << h1_count << "\t" << (conc_H1_svtig1 / (double)h1_count) * 100 << "\n";
 		fp_conc << "svtig1\tH2\t" << conc_H2_svtig1 << "\t" << h1_count << "\t" << (conc_H2_svtig1 / (double)h1_count) * 100 << "\n";
 
-		double conc_H1 = (conc_H1_svtig1 / (double)h1_count) * 100;
-		double conc_H2 = (conc_H2_svtig1 / (double)h1_count) * 100;
-		std::cerr << "  Concordance: H1=" << conc_H1 << "%, H2=" << conc_H2 << "%\n";
+		crow("svtig1", "H1", conc_H1_svtig1, h1_count);
+		crow("svtig1", "H2", conc_H2_svtig1, h1_count);
 	}
 
 	// Aggregate VeriScore
