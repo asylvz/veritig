@@ -89,6 +89,8 @@ void Validate::compute_stats(parameters& params)
 					it->second->mapq = rec.mapq;
 					it->second->highest_map_ratio = rec.map_ratio;
 					it->second->aln_identity = rec.aln_identity;
+					it->second->h1_mr = rec.map_ratio;
+					it->second->h1_id = rec.aln_identity;
 					it->second->contig = rec.contig;
 					it->second->ins_count = rec.ins_count;
 					it->second->del_count = rec.del_count;
@@ -106,6 +108,8 @@ void Validate::compute_stats(parameters& params)
 				r->mapq = rec.mapq;
 				r->highest_map_ratio = rec.map_ratio;
 				r->aln_identity = rec.aln_identity;
+				r->h1_mr = rec.map_ratio;
+				r->h1_id = rec.aln_identity;
 				r->contig = rec.contig;
 				r->ins_count = rec.ins_count;
 				r->del_count = rec.del_count;
@@ -137,8 +141,12 @@ void Validate::compute_stats(parameters& params)
 			auto it = reads.find(rec.read_name);
 			if (it != reads.end())
 			{
-				// Already seen in H1 → mark as homozygous
-				it->second->homo = true;
+				// Track the best H2 alignment (for the concordant-on-both homozygosity check)
+				if (rec.map_ratio > it->second->h2_mr)
+				{
+					it->second->h2_mr = rec.map_ratio;
+					it->second->h2_id = rec.aln_identity;
+				}
 
 				// If H2 mapping is better, update metrics and mark H2
 				if (rec.map_ratio > it->second->highest_map_ratio)
@@ -167,6 +175,8 @@ void Validate::compute_stats(parameters& params)
 				r->mapq = rec.mapq;
 				r->highest_map_ratio = rec.map_ratio;
 				r->aln_identity = rec.aln_identity;
+				r->h2_mr = rec.map_ratio;
+				r->h2_id = rec.aln_identity;
 				r->contig = rec.contig;
 				r->ins_count = rec.ins_count;
 				r->del_count = rec.del_count;
@@ -182,6 +192,11 @@ void Validate::compute_stats(parameters& params)
 		Read* r = it->second;
 
 		bool is_concordant = (r->highest_map_ratio >= params.min_map_ratio && r->aln_identity >= params.min_aln_identity);
+
+		// Homozygous only if concordant on BOTH haplotypes (matches the manuscript definition)
+		bool conc_h1 = (r->h1_mr >= params.min_map_ratio && r->h1_id >= params.min_aln_identity);
+		bool conc_h2 = (r->h2_mr >= params.min_map_ratio && r->h2_id >= params.min_aln_identity);
+		r->homo = conc_h1 && conc_h2;
 
 		std::string sv_type;
 		if (r->ins_count > 0 && r->del_count == 0) sv_type = "INS";

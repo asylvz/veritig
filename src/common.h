@@ -79,6 +79,8 @@ typedef struct _read
 	double aln_identity = 0.0;
 	int haplo = 0;
 	bool homo = false;
+	double h1_mr = 0.0, h1_id = 0.0;  // best H1 alignment metrics (for concordant-on-both check)
+	double h2_mr = 0.0, h2_id = 0.0;  // best H2 alignment metrics (for concordant-on-both check)
 	std::string contig;
 } Read;
 
