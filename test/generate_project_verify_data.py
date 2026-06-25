@@ -108,7 +108,7 @@ write_multi_fasta(
 write_fasta("test/h1_test.fa", "chr_test", h1)
 write_fasta("test/h2_test.fa", "chr_test", h2)
 
-# Reference VCF (human-readable; --project writes equivalent records with 'N' anchors)
+# Reference VCF (--project writes equivalent records with 'N' anchors)
 with open("test/expected_pv.vcf", "w") as f:
     f.write("##fileformat=VCFv4.2\n")
     f.write("##INFO=<ID=SVTYPE,Number=1,Type=String,Description=\"Type\">\n")

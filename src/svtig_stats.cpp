@@ -156,7 +156,7 @@ void SvtigStats::write_report(SeqStats& s1, SeqStats& s2, SeqStats& combined, bo
 		fp << "size_10000_plus\t" << s1.size_10000_plus << "\n";
 	}
 
-	// Terminal summary: full table (the .tsv above is the machine-readable copy)
+	// Terminal summary: full table
 	auto dbl = [](double v, int p) { std::ostringstream o; o << std::fixed << std::setprecision(p) << v; return o.str(); };
 	auto vals = [&](const SeqStats& s) {
 		return std::vector<std::string>{

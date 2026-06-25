@@ -348,7 +348,7 @@ void init_logs(parameters& params)
 	{
 		std::cerr << "Concordance thresholds: map_ratio >= " << params.min_map_ratio
 			<< ", identity >= " << params.min_aln_identity << "\n";
-		std::cerr << "minimap2 preset: " << params.minimap_preset << "\n";
+		std::cerr << "minimap2 preset: " << ((params.project || params.verify) ? "asm5" : params.minimap_preset.c_str()) << "\n";
 		std::cerr << "Threads: " << params.threads << "\n";
 	}
 }

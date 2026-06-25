@@ -6,6 +6,7 @@
 #include <set>
 #include <cctype>
 #include <cstdint>
+#include <cstdlib>
 #include "project.h"
 #include "edlib.h"
 
@@ -22,8 +23,6 @@ void Project::run_mapping(parameters& params, const std::string& svtig_fasta, co
 }
 
 
-// Load FASTA into a map: name -> sequence. Names are taken up to first whitespace.
-// Sequences are uppercased for consistency with cs-extracted sequences.
 std::map<std::string, std::string> Project::load_fasta(const std::string& fasta_path)
 {
 	std::map<std::string, std::string> out;
@@ -179,14 +178,16 @@ std::vector<ProjectedSV> Project::parse_paf(const std::string& paf_path, int hap
 		if (tokens.size() < 12) continue;
 
 		std::string svtig_name = tokens[0];
-		int q_len = std::stoi(tokens[1]);
-		int q_start = std::stoi(tokens[2]);
-		int q_end = std::stoi(tokens[3]);
+		int q_len = std::atoi(tokens[1].c_str());
+		int q_start = std::atoi(tokens[2].c_str());
+		int q_end = std::atoi(tokens[3].c_str());
 		char strand = tokens[4][0];
 		std::string chrom = tokens[5];
-		int tgt_start_0b = std::stoi(tokens[7]);
-		int tgt_end_0b = std::stoi(tokens[8]);
-		int mapq = std::stoi(tokens[11]);
+		int tgt_start_0b = std::atoi(tokens[7].c_str());
+		int tgt_end_0b = std::atoi(tokens[8].c_str());
+		int mapq = std::atoi(tokens[11].c_str());
+
+		if (q_len <= 0) continue;   // skip malformed PAF lines
 
 		aligned_svtig_names.insert(svtig_name);
 
@@ -299,17 +300,11 @@ std::vector<ProjectedSV> Project::parse_paf(const std::string& paf_path, int hap
 }
 
 
-// Generic split-alignment / soft-clip framework.
-// For each svtig: sort alignments by query position, find unaligned query intervals (gaps).
-// Each gap >= min_split_svlen becomes an INS candidate, anchored at the appropriate ref position.
-// Cases handled:
-//   - Leading soft-clip (gap at q=0..q_start of first aln) -> INS at first_aln.t_start
-//   - Trailing soft-clip (gap at q=last_aln.q_end..q_len) -> INS at last_aln.t_end
-//   - Internal gap between two adjacent alignments        -> INS at left_aln.t_end
-// Filters:
-//   - Internal gap requires same chrom, same strand, |t_distance| <= max_split_distance
-//   - Strand mismatch -> skip (INV candidate, deferred)
-//   - Cross-chrom    -> skip (TRA, out of scope)
+// Extract INS from unaligned query gaps (soft-clips and inter-alignment gaps).
+// Each svtig's alignments are sorted by query position; a gap >= min_split_svlen is
+// emitted as an INS anchored at the adjacent ref position. Internal gaps must be same
+// chrom/strand within max_split_distance; strand flips (INV) and cross-chrom (TRA) are
+// left for other passes.
 std::vector<ProjectedSV> Project::extract_split_ins(
     const std::map<std::string, std::vector<AlignmentRecord>>& svtig_alns,
     const std::map<std::string, std::string>& svtig_seqs,
@@ -411,11 +406,6 @@ std::vector<ProjectedSV> Project::extract_split_ins(
 			out.push_back(sv);
 		}
 
-		// Note: 2-segment INV detection from same-strand non-monotonic ref gap was tested but
-		// rolled back. The pattern recovers some small INVs (INV_small +0.010 F1) but the
-		// non-monotonic ref-gap signal is also produced by minimap2 chain artefacts in larger
-		// inversion regions, hurting INV_large F1 by -0.016. Net average F1 is lower.
-		// Future work: segment-strand pattern with MAPQ filtering or repeat-aware vetoing.
 
 		// Second pass: pairwise transitions for INS (same strand, query gap)
 		for (size_t i = 1; i < alns.size(); i++)
@@ -546,18 +536,10 @@ std::vector<ProjectedSV> Project::cluster_within_svtig(std::vector<ProjectedSV>&
 }
 
 
-// Reclassify INS events as DUP (tandem duplication) when the inserted sequence
-// matches a flanking reference window with high similarity.
-//
-// Mechanism:
-//   For each INS event at chrom:pos with inserted sequence S of length L:
-//   1. Extract a reference window of size +/- factor*L around pos
-//   2. Use edlib HW (infix) mode to find best local match of S inside the window
-//   3. Compute identity = 1 - editDistance / L
-//   4. If identity >= dup_similarity, change SVTYPE from INS to DUP
-//
-// This is a post-hoc classification that operates only on already-emitted INS events.
-// It does not change pos, svlen, or alt_seq -- only the svtype label.
+// Relabel an INS as DUP when its inserted sequence S (length L) closely matches a
+// nearby reference copy: edlib HW-aligns S to a +/- factor*L window and relabels if
+// identity (1 - editDistance/L) >= dup_similarity. Post-hoc; only the svtype changes,
+// not pos/svlen/alt_seq.
 void Project::classify_dups(std::vector<ProjectedSV>& events, parameters& params)
 {
 	if (ref_seqs.empty())
@@ -617,20 +599,10 @@ void Project::classify_dups(std::vector<ProjectedSV>& events, parameters& params
 }
 
 
-// Flag insertion-like events whose inserted sequence consists mostly of k-mers that occur
-// many times in the surrounding reference window. Such events are typically alignment
-// artefacts in tandem-repeat-rich regions where minimap2 may produce spurious I ops without
-// a real biological insertion.
-//
-// Algorithm:
-//   For each INS or DUP event:
-//     1. Extract inserted sequence S (alt_seq[1..])
-//     2. Build a ref window of size +/- max(window_factor*|S|, ambig_min_window) around pos
-//     3. Count k-mer occurrences in the ref window
-//     4. For each k-mer in S, look up its abundance in the ref window
-//     5. If median abundance >= ambig_threshold, set sv.ambig = true
-//
-// The flag is later written as FILTER=Ambig in the VCF (vs FILTER=PASS).
+// Flag an INS/DUP as ambiguous when its inserted sequence sits in a repeat: such calls
+// are often minimap2 artefacts in tandem-repeat regions. Count k-mer abundances of S
+// against a +/- max(window_factor*|S|, ambig_min_window) reference window; if the median
+// abundance >= ambig_threshold, set sv.ambig (written as FILTER=Ambig).
 void Project::flag_ambiguous_repeats(std::vector<ProjectedSV>& events, parameters& params)
 {
 	if (ref_seqs.empty()) return;

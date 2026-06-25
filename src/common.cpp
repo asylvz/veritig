@@ -23,9 +23,6 @@ void run_command(const std::string& cmd, const std::string& output_file)
 }
 
 
-// No-throw integer parse for machine-generated PAF fields: returns 0 on a
-// non-numeric token instead of throwing, so one malformed line cannot abort
-// the whole run. Identical to stoi for valid numeric tokens.
 static int to_int(const std::string& s)
 {
 	return (int)std::strtol(s.c_str(), nullptr, 10);
@@ -113,9 +110,13 @@ int parse_paf_line(std::string& line, PafRecord& rec)
 	if (query_start == 0 && query_end == 0)
 		return RETURN_ERROR;
 
+	if (rec.svtig_size <= 0)
+		return RETURN_ERROR;
+
+	int block_len = to_int(tokens[10]);
 	rec.aligned_bases = query_end - query_start;
 	rec.map_ratio = (double)rec.aligned_bases / rec.svtig_size;
-	rec.aln_identity = (double)to_int(tokens[9]) / to_int(tokens[10]);
+	rec.aln_identity = (block_len > 0) ? (double)to_int(tokens[9]) / block_len : 0.0;
 
 	rec.sv_count = 0;
 	rec.ins_count = 0;

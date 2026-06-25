@@ -568,8 +568,6 @@ void Verify::write_summary(const std::string& path, int n_total, int n_verified,
 }
 
 
-// --- main entry ---
-
 void Verify::run(parameters& params)
 {
 	if (params.verify_vcf_path.empty())
