@@ -119,6 +119,7 @@ int parse_command_line(int argc, char** argv, parameters& params)
 				break;
 			case 'P':
 				params.minimap_preset = optarg;
+				params.preset_set = true;
 				break;
 			case 'w':
 				params.project = true;
@@ -348,7 +349,7 @@ void init_logs(parameters& params)
 	{
 		std::cerr << "Concordance thresholds: map_ratio >= " << params.min_map_ratio
 			<< ", identity >= " << params.min_aln_identity << "\n";
-		std::cerr << "minimap2 preset: " << ((params.project || params.verify) ? "asm5" : params.minimap_preset.c_str()) << "\n";
+		std::cerr << "minimap2 preset: " << effective_preset(params) << "\n";
 		std::cerr << "Threads: " << params.threads << "\n";
 	}
 }
@@ -401,7 +402,7 @@ void print_help()
 	std::cerr << "\t--h2                : Haplotype 2 assembly file (optional)" << std::endl;
 	std::cerr << std::endl;
 	std::cerr << "General options" << std::endl;
-	std::cerr << "\t--preset (-P)       : minimap2 preset [asm10] (e.g., asm5, asm10, asm20)" << std::endl;
+	std::cerr << "\t--preset (-P)       : minimap2 preset [asm10; asm5 for --project/--verify] (e.g., asm5, asm10, asm20)" << std::endl;
 	std::cerr << "\t--threads (-T)      : Number of threads for minimap2 [16]" << std::endl;
 	std::cerr << "\t--min-map-ratio (-M): Min mapping ratio for concordance [0.85]" << std::endl;
 	std::cerr << "\t--min-identity (-I) : Min alignment identity for concordance [0.85]" << std::endl;

@@ -61,7 +61,17 @@ typedef struct _parameters
 	double min_map_ratio = 0.85;
 	double min_aln_identity = 0.85;
 	std::string minimap_preset = "asm10";
+	bool preset_set = false;          // true once --preset/-P is given explicitly
 } parameters;
+
+// Preset per mode: --project/--verify default to asm5, all other modes to asm10;
+// --preset overrides both. Resolved here so one mode cannot alter another's preset.
+inline std::string effective_preset(const parameters& params)
+{
+	if (!params.preset_set && (params.project || params.verify))
+		return "asm5";
+	return params.minimap_preset;
+}
 
 typedef struct _read
 {

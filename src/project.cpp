@@ -15,7 +15,7 @@ void Project::run_mapping(parameters& params, const std::string& svtig_fasta, co
 {
 	std::string threads_str = std::to_string(params.threads);
 	std::cerr << "  Mapping " << svtig_fasta << " to reference...";
-	std::string cmd = "minimap2 -cx asm5 --cs -r2k -t " + threads_str + " "
+	std::string cmd = "minimap2 -cx " + shell_quote(effective_preset(params)) + " --cs -r2k -t " + threads_str + " "
 		+ shell_quote(params.reference_path) + " " + shell_quote(svtig_fasta)
 		+ " --secondary=no > " + shell_quote(paf_out) + " 2>/dev/null";
 	run_command(cmd, paf_out);
