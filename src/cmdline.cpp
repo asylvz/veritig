@@ -40,6 +40,7 @@ int parse_command_line(int argc, char** argv, parameters& params)
 		{"cluster-size-ratio" , required_argument, NULL, 'Z'},
 		{"dedup-pos-tol" , required_argument, NULL, 'X'},
 		{"dedup-size-tol" , required_argument, NULL, 'Y'},
+		{"split-ins" , no_argument, NULL, 'S'},
 		{"min-split-svlen" , required_argument, NULL, 'A'},
 		{"max-split-distance" , required_argument, NULL, 'B'},
 		{"dup-similarity" , required_argument, NULL, 'C'},
@@ -59,7 +60,7 @@ int parse_command_line(int argc, char** argv, parameters& params)
 		{NULL, 0, NULL, 0}
 	};
 
-	while((o = getopt_long( argc, argv, "a:b:cd:e:f:hi:j:mo:pqrs:t:u:vyT:M:I:DP:wR:L:Q:W:Z:X:Y:A:B:C:E:F:G:K:N:O:U:V", long_options, &index)) != -1)
+	while((o = getopt_long( argc, argv, "a:b:cd:e:f:hi:j:mo:pqrs:t:u:vyT:M:I:DP:wR:L:Q:W:Z:X:Y:A:B:C:E:F:G:K:N:O:U:VS", long_options, &index)) != -1)
 	{
 		switch(o)
 		{
@@ -144,6 +145,9 @@ int parse_command_line(int argc, char** argv, parameters& params)
 				break;
 			case 'Y':
 				params.dedup_size_tol = atof(optarg);
+				break;
+			case 'S':
+				params.split_ins = true;
 				break;
 			case 'A':
 				params.min_split_svlen = atoi(optarg);
@@ -393,6 +397,7 @@ void print_help()
 	std::cerr << "\t--svtig3 (-U)       : SVarp untagged (unphased) svtigs (FASTA, optional)" << std::endl;
 	std::cerr << "\t--min-svlen (-L)    : Minimum SV length [50]" << std::endl;
 	std::cerr << "\t--min-mapq (-Q)     : Minimum svtig alignment MAPQ [20]" << std::endl;
+	std::cerr << "\t--split-ins (-S)    : Also call INS from split alignments [off]" << std::endl;
 	std::cerr << "\t--dup-similarity (-C) : Identity threshold to reclassify INS as DUP [0.85]" << std::endl;
 	std::cerr << std::endl;
 	std::cerr << "svtig VCF verification (--verify)" << std::endl;

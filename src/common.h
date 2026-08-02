@@ -43,6 +43,7 @@ typedef struct _parameters
 	double cluster_size_ratio = 0.7;
 	int dedup_pos_tol = 50;
 	double dedup_size_tol = 0.1;
+	bool split_ins = false;           // recover INS from split alignments; off by default (see --split-ins)
 	int min_split_svlen = 2000;       // matches minimap2 -r2k chain gap threshold; smaller gaps may be chain heuristics, not real SVs
 	int max_split_distance = 100000;
 	double dup_similarity = 0.85;     // identity threshold to reclassify INS as DUP (tandem duplication)

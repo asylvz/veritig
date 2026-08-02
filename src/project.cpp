@@ -221,7 +221,7 @@ std::vector<ProjectedSV> Project::parse_paf(const std::string& paf_path, int hap
 	std::cerr << "  " << paf_path << ": " << n_alignments << " alignments, "
 		<< svs.size() << " SVs >=" << params.min_svlen << "bp from CIGAR\n";
 
-	// Split-alignment / soft-clip INS detection from query coverage gaps
+	// Split-alignment analysis: 3-segment INV always, query-gap INS only with --split-ins.
 	std::vector<ProjectedSV> split_svs = extract_split_ins(svtig_alns, svtig_seqs, haplo, params);
 	if (!split_svs.empty())
 	{
@@ -414,8 +414,10 @@ std::vector<ProjectedSV> Project::extract_split_ins(
 		}
 
 
-		// Second pass: pairwise transitions for INS (same strand, query gap)
-		for (size_t i = 1; i < alns.size(); i++)
+		// Second pass: pairwise transitions for INS (same strand, query gap).
+		// Off by default: most accepted pairs skip kilobases of reference, which is not a
+		// simple insertion. Enable with --split-ins.
+		for (size_t i = 1; params.split_ins && i < alns.size(); i++)
 		{
 			const AlignmentRecord& L = alns[i - 1];
 			const AlignmentRecord& R = alns[i];
