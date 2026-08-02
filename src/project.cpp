@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <cstdlib>
 #include "project.h"
+#include "verify.h"
 #include "edlib.h"
 
 
@@ -332,8 +333,10 @@ std::vector<ProjectedSV> Project::extract_split_ins(
 		auto seq_it = svtig_seqs.find(svtig_name);
 		bool have_seq = (seq_it != svtig_seqs.end() && (int)seq_it->second.size() == q_len);
 
-		// Helper to emit one INS candidate for a query gap [q_lo, q_hi) anchored at ref_pos (1-based)
-		auto emit_gap = [&](int q_lo, int q_hi, const std::string& chrom, int ref_pos_1b, int mapq) {
+		// Helper to emit one INS candidate for a query gap [q_lo, q_hi) anchored at ref_pos (1-based).
+		// strand is the strand both flanking alignments share; on '-' the svtig aligns as its
+		// reverse complement, so the query gap must be flipped to reference orientation for ALT.
+		auto emit_gap = [&](int q_lo, int q_hi, const std::string& chrom, int ref_pos_1b, int mapq, char strand) {
 			int gap_size = q_hi - q_lo;
 			if (gap_size < min_size) return;
 			ProjectedSV sv;
@@ -343,7 +346,11 @@ std::vector<ProjectedSV> Project::extract_split_ins(
 			sv.svlen = gap_size;
 			sv.ref_base = "N";
 			if (have_seq)
-				sv.alt_seq = "N" + seq_it->second.substr(q_lo, gap_size);
+			{
+				std::string ins = seq_it->second.substr(q_lo, gap_size);
+				if (strand == '-') ins = Verify::reverse_complement(ins);
+				sv.alt_seq = "N" + ins;
+			}
 			else
 				sv.alt_seq = "N" + std::string(gap_size, 'N');
 			sv.svtig_name = svtig_name;
@@ -439,8 +446,11 @@ std::vector<ProjectedSV> Project::extract_split_ins(
 				continue;
 			}
 
-			// Anchor at L.t_end (last aligned ref base of left alignment, 1-based)
-			emit_gap(L.q_end, R.q_start, L.t_chrom, L.t_end, std::max(L.mapq, R.mapq));
+			// Anchor at the ref base where the left alignment ends in query order (1-based).
+			// On the minus strand the query advances as the reference retreats, so that is
+			// t_start, not t_end. L and R share a strand here (flips are skipped above).
+			int anchor = (L.strand == '+') ? L.t_end : L.t_start;
+			emit_gap(L.q_end, R.q_start, L.t_chrom, anchor, std::max(L.mapq, R.mapq), L.strand);
 		}
 	}
 

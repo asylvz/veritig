@@ -67,6 +67,9 @@ class Verify
 public:
 	void run(parameters& params);
 
+	// Sequence utility, also used when projecting minus-strand alignments.
+	static std::string reverse_complement(const std::string& s);
+
 private:
 	// Pipeline steps
 	std::vector<VerifySV> read_vcf(const std::string& vcf_path);
@@ -93,7 +96,6 @@ private:
 	                   const std::map<std::string, std::map<std::string,int>>& by_type);
 
 	// Helpers
-	static std::string reverse_complement(const std::string& s);
 	static int parse_int_info(const std::string& info_field);
 	static void parse_cigar_max_indel(const std::string& cigar, int& max_ins, int& max_del);
 };
