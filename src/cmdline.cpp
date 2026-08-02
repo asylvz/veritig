@@ -392,7 +392,7 @@ void print_help()
 	std::cerr << "\t--svtig2            : H2 svtig FASTA file (optional; phased mode if provided)" << std::endl;
 	std::cerr << "\t--svtig3 (-U)       : SVarp untagged (unphased) svtigs (FASTA, optional)" << std::endl;
 	std::cerr << "\t--min-svlen (-L)    : Minimum SV length [50]" << std::endl;
-	std::cerr << "\t--min-mapq (-Q)     : Minimum svtig alignment MAPQ [0]" << std::endl;
+	std::cerr << "\t--min-mapq (-Q)     : Minimum svtig alignment MAPQ [20]" << std::endl;
 	std::cerr << "\t--dup-similarity (-C) : Identity threshold to reclassify INS as DUP [0.85]" << std::endl;
 	std::cerr << std::endl;
 	std::cerr << "svtig VCF verification (--verify)" << std::endl;
